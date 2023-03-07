@@ -1,177 +1,191 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-<title>Schaufenster | {{ shop.name }}</title>
-<style>
-body {
-height: 100vh;
-}
-.title-image {
-flex: 3;
-height: 100vh;
-background-size: cover;
-background-position: center
-}
-.item {
-display: flex;
-}
-.table td, .table th {
-padding: .45rem 0;
-}
-.headline {
-font-size: 1.5rem;
-font-weight: 300;
-}
-.sub-title {
-font-size: 1.05rem;
-font-weight: 300;
-}
-{% if shop.color %}
-.text-primary {
-color: {{ shop.color }} !important;
-}
-{% endif %}
-td:first-child {
-width: 140px;
-}
-</style>
-</head>
-<body>
-<div class="owl-carousel owl-theme">
-{% for property in properties %}
-<div class="item">
-<div class="title-image" style="background-image: url('{{ property.images | map: 'url' | first }}')"></div>
-<div class="col p-4">
-<br>
-<br>
-<h5 class="sub-title text-primary">{{ property.zip_code }} {{ property.city }} </h5>
-<h1 class="headline">{{ property.title }}</h1>
-<br>
-<br>
-<br>
-{% if property.rs_type == "TRADE_SITE" %}
-<h5 class="sub-title text-primary">Grunddaten</h5>
-<table class="table mb-4">
-<tr>
-<td>Objekt Nr.</td>
-<td>{{ property.unit_id }}</td>
-</tr>
-<tr>
-<td>Grundstücksgröße</td>
-<td>{{ property.plot_area | space }}</td>
-</tr>
-</table>
-{% else %}
-<h5 class="sub-title text-primary">Grunddaten</h5>
-<table class="table mb-4">
-<tr>
-<td>Objekt Nr.</td>
-<td>{{ property.unit_id }}</td>
-</tr>
-<tr>
-<td>Baujahr</td>
-<td>{{ property.construction_year }}</td>
-</tr>
-<tr>
-<td>Energieausweis</td>
-<td>
-{% if property.monument %}
-Bei Denkmalschutz kein Energieausweis erforderlich
-{% else %}
-{{ property.building_energy_rating_type | equals: "Verbrauchsausweis" | either_or: "V", "B" }}:
-{{ property.thermal_characteristic | number }} kwh/(m²*a), {{ property.energy_efficiency_class }}<br>
-{{ property.firing_types }}-{{ property.heating_type }},
-{% endif %}
-</td>
-</tr>
-</table>
-<h5 class="sub-title text-primary">Flächenaufstellung</h5>
-<table class="table mb-4">
-{% if property.rs_type == "HOUSE" %}
-<tr>
-<td>Grundstück</td>
-<td>{{ property.plot_area | space }}</td>
-</tr>
-{% endif %}
-<tr>
-<td>Wohnfläche</td>
-<td>{{ property.living_space | space }}</td>
-</tr>
-<tr>
-<td>Nutzfläche</td>
-<td>{{ property.usable_floor_space | space }}</td>
-</tr>
-<tr>
-<td>Zimmer</td>
-<td>{{ property.number_of_rooms | number }}</td>
-</tr>
-</table>
-{% endif %}
-{% if property.marketing_type == "BUY" %}
-<h5 class="sub-title text-primary">Kaufpreis</h5>
-<table class="table mb-4">
-<tr>
-<td>Kaufpreis</td>
-<td>{{ property.formatted.price }}</td>
-</tr>
-<tr>
-<td>Kaufpreis Stellplatz</td>
-<td>{{ property.formatted.custom.kaufpreis_stellplatz }}</td>
-</tr>
-<tr>
-<td>Provision</td>
-<td>{{ property.courtage }}</td>
-</tr>
-</table>
-{% else %}
-<h5 class="sub-title text-primary">Mietpreis</h5>
-<table class="table">
-<tr>
-<td>Mietpreis</td>
-<td>
-{{ property.total_rent | default: property.base_rent | price: property.currency }} p.M.
-{% if property.parking_space_price %}
-zzgl. Stpl.
-{% endif %}
-</td>
-</tr>
-{% if property.service_charge %}
-<tr>
-<td>Nebenkosten</td>
-<td>{{ property.service_charge | price: property.currency }}</td>
-</tr>
-{% endif %}
-</table>
-{% endif %}
-</div>
-</div>
-{% endfor %}
-</div>
-<script>
-$('.owl-carousel').owlCarousel({
-animateOut: 'fadeOut',
-autoplay: true,
-autoplayTimeout: 10000,
-loop: true,
-nav: false,
-dots: false,
-responsive: {
-0: { items: 1 },
-600: { items: 1 },
-1000: { items: 1 }
-}
-});
-setTimeout(function() {
-location.reload();
-}, 1000 * 60 * 10);
-</script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <title>Schaufenster | {{ shop.name }}</title>
+    <style>
+      body {
+      height: 100vh;
+      }
+      .title-image {
+      flex: 3;
+      height: 100vh;
+      background-size: cover;
+      background-position: center
+      }
+      .item {
+      display: flex;
+      }
+      .table td, .table th {
+      padding: .45rem 0;
+      }
+      .headline {
+      font-size: 1.5rem;
+      font-weight: 300;
+      }
+      .sub-title {
+      font-size: 1.05rem;
+      font-weight: 300;
+      }
+      {% if shop.color %}
+      .text-primary {
+      color: {{ shop.color }} !important;
+      }
+      {% endif %}
+      td:first-child {
+      width: 140px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="owl-carousel owl-theme">
+      {% for property in properties %}
+      <div class="item">
+        <div
+          class="title-image"
+          style="background-image: url('{{ property.images | map: 'url' | first }}')"
+        ></div>
+        <div class="col p-4">
+          <br />
+          <br />
+          <h5 class="sub-title text-primary">
+            {{ property.zip_code }} {{ property.city }}
+          </h5>
+          <h1 class="headline">{{ property.title }}</h1>
+          <br />
+          <br />
+          <br />
+          {% if property.rs_type == "TRADE_SITE" %}
+          <h5 class="sub-title text-primary">Grunddaten</h5>
+          <table class="table mb-4">
+            <tr>
+              <td>Objekt Nr.</td>
+              <td>{{ property.unit_id }}</td>
+            </tr>
+            <tr>
+              <td>Grundstücksgröße</td>
+              <td>{{ property.plot_area | space }}</td>
+            </tr>
+          </table>
+          {% else %}
+          <h5 class="sub-title text-primary">Grunddaten</h5>
+          <table class="table mb-4">
+            <tr>
+              <td>Objekt Nr.</td>
+              <td>{{ property.unit_id }}</td>
+            </tr>
+            <tr>
+              <td>Baujahr</td>
+              <td>{{ property.construction_year }}</td>
+            </tr>
+            <tr>
+              <td>Energieausweis</td>
+              <td>
+                {% if property.monument %} Bei Denkmalschutz kein Energieausweis
+                erforderlich {% else %} {{ property.building_energy_rating_type
+                | equals: "Verbrauchsausweis" | either_or: "V", "B" }}: {{
+                property.thermal_characteristic | number }} kwh/(m²*a), {{
+                property.energy_efficiency_class }}<br />
+                {{ property.firing_types }}-{{ property.heating_type }}, {%
+                endif %}
+              </td>
+            </tr>
+          </table>
+          <h5 class="sub-title text-primary">Flächenaufstellung</h5>
+          <table class="table mb-4">
+            {% if property.rs_type == "HOUSE" %}
+            <tr>
+              <td>Grundstück</td>
+              <td>{{ property.plot_area | space }}</td>
+            </tr>
+            {% endif %}
+            <tr>
+              <td>Wohnfläche</td>
+              <td>{{ property.living_space | space }}</td>
+            </tr>
+            <tr>
+              <td>Nutzfläche</td>
+              <td>{{ property.usable_floor_space | space }}</td>
+            </tr>
+            <tr>
+              <td>Zimmer</td>
+              <td>{{ property.number_of_rooms | number }}</td>
+            </tr>
+          </table>
+          {% endif %} {% if property.marketing_type == "BUY" %}
+          <h5 class="sub-title text-primary">Kaufpreis</h5>
+          <table class="table mb-4">
+            <tr>
+              <td>Kaufpreis</td>
+              <td>{{ property.formatted.price }}</td>
+            </tr>
+            <tr>
+              <td>Kaufpreis Stellplatz</td>
+              <td>{{ property.formatted.custom.kaufpreis_stellplatz }}</td>
+            </tr>
+            <tr>
+              <td>Provision</td>
+              <td>{{ property.courtage }}</td>
+            </tr>
+          </table>
+          {% else %}
+          <h5 class="sub-title text-primary">Mietpreis</h5>
+          <table class="table">
+            <tr>
+              <td>Mietpreis</td>
+              <td>
+                {{ property.total_rent | default: property.base_rent | price:
+                property.currency }} p.M. {% if property.parking_space_price %}
+                zzgl. Stpl. {% endif %}
+              </td>
+            </tr>
+            {% if property.service_charge %}
+            <tr>
+              <td>Nebenkosten</td>
+              <td>{{ property.service_charge | price: property.currency }}</td>
+            </tr>
+            {% endif %}
+          </table>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <script>
+      $(".owl-carousel").owlCarousel({
+        animateOut: "fadeOut",
+        autoplay: true,
+        autoplayTimeout: 10000,
+        loop: true,
+        nav: false,
+        dots: false,
+        responsive: {
+          0: { items: 1 },
+          600: { items: 1 },
+          1000: { items: 1 },
+        },
+      });
+      setTimeout(function () {
+        location.reload();
+      }, 1000 * 60 * 10);
+    </script>
+  </body>
 </html>
