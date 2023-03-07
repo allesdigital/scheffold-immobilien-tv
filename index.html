@@ -141,10 +141,12 @@
               <td>Kaufpreis Stellplatz</td>
               <td>{{ property.formatted.custom.kaufpreis_stellplatz }}</td>
             </tr>
+            {% if property.courtage %}
             <tr>
               <td>Provision</td>
               <td>{{ property.courtage }}</td>
             </tr>
+            {% endif %}
           </table>
           {% else %}
           <h5 class="sub-title text-primary">Mietpreis</h5>
