@@ -96,18 +96,6 @@
               <td>Baujahr</td>
               <td>{{ property.construction_year }}</td>
             </tr>
-            <tr>
-              <td>Energieausweis</td>
-              <td>
-                {% if property.monument %} Bei Denkmalschutz kein Energieausweis
-                erforderlich {% else %} {{ property.building_energy_rating_type
-                | equals: "Verbrauchsausweis" | either_or: "V", "B" }}: {{
-                property.thermal_characteristic | number }} kwh/(m²*a), {{
-                property.energy_efficiency_class }}<br />
-                {{ property.firing_types }}-{{ property.heating_type }}, {%
-                endif %}
-              </td>
-            </tr>
           </table>
           <h5 class="sub-title text-primary">Flächenaufstellung</h5>
           <table class="table mb-4">
